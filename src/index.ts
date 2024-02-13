@@ -3,9 +3,10 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import { UserInterface } from 'types/UserInterface.types';
-import { authentication, normalizeCamelCase, random } from './helpers';
+import { CredentialsInterface, UserCredentialsInterface, UserInterface } from 'types/UserInterface.types';
+import { authentication, random } from './helpers';
 import 'dotenv/config'
+import { UserFields } from './constants/UserFields';
 
 const app = express();
 const PORT = process.env.PORT
@@ -30,7 +31,7 @@ app.get("/users", (req, res) => {
 
 app.post('/users', (req, res) => {
   const { email, firstName, lastName, password } = req.body
-  const userCredentials = {
+  const userCredentials: UserCredentialsInterface = {
     email,
     firstName,
     lastName,
@@ -39,15 +40,15 @@ app.post('/users', (req, res) => {
 
   try {
     // check if req is complete
-    const missingCreds: string[] = []
-    Object.entries(userCredentials).map(userCredential => {
-      if(!userCredential[1]) {
-        const formattedCredential = normalizeCamelCase(userCredential[0])
-        missingCreds.push(formattedCredential)
+    const missingCreds: CredentialsInterface[] = []
+    UserFields.map(userField => {
+      const field = userField.field as keyof UserCredentialsInterface
+      if(!userCredentials[field]) {
+        missingCreds.push(userField)
       }
     })
     if(missingCreds.length > 0) {
-      return res.status(400).send(`The following are required: ${missingCreds.join(', ')}`)
+      return res.status(400).send(missingCreds)
     }
 
     // check if user exists

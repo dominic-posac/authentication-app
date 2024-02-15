@@ -5,8 +5,9 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import { CredentialsInterface, UserCredentialsInterface, UserInterface } from 'types/UserInterface.types';
 import { authentication, random } from './helpers';
-import 'dotenv/config'
+import 'dotenv/config';
 import { UserFields } from './constants/UserFields';
+import { sendRegistrationEmail } from './utils/mailer';
 
 const app = express();
 const PORT = process.env.PORT
@@ -29,7 +30,7 @@ app.get("/users", (req, res) => {
   res.send(users);
 });
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
   const { email, firstName, lastName, password } = req.body
   const userCredentials: UserCredentialsInterface = {
     email,
@@ -68,7 +69,18 @@ app.post('/users', (req, res) => {
         password: authentication(salt, password)
       }
     }
+    
     users.push(user)
+
+    // if(user creation is success)
+    const mailData = {
+      user: process.env.REGISTRATION_EMAIL_ADDRESS,
+      to: email,
+      subject: 'Successfully Registered!',
+      html: `<b>Hey there! </b><br> Thank you for registering, ${firstName} ${lastName}!<br/>`,
+    };
+    const registerEmail = await sendRegistrationEmail(mailData)
+    // if(email has an error, do i stop?)
 
     return res.status(200).send('You have successfully registered!').end();
   } catch (error) {

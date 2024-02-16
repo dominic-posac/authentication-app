@@ -1,4 +1,4 @@
-export const UserFields = [
+export const registerFieldErrors = [
   {
     field: 'email',
     message: 'An Email Address is required.'
@@ -14,5 +14,16 @@ export const UserFields = [
   {
     field: 'password',
     message: 'You are required to set a password.'
+  },
+]
+
+export const loginFieldErrors = [
+  {
+    field: 'email',
+    message: 'Your email is blank!'
+  },
+  {
+    field: 'password',
+    message: 'Please enter your password.'
   },
 ]

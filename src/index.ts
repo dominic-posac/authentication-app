@@ -4,11 +4,11 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import { CredentialsInterface, UserCredentialsInterface, UserInterface } from 'types/UserInterface.types';
-import { authentication, random } from './helpers';
+import { authentication, random } from './utils/helpers';
 import 'dotenv/config';
-import { UserFields } from './constants/UserFields';
+import { UserFields } from './utils/constants/UserFields';
 import { sendRegistrationEmail } from './utils/mailer';
-import { getMailData } from './constants/MailData';
+import { getMailData } from './utils/constants/MailData';
 
 const app = express();
 const PORT = process.env.PORT
@@ -31,7 +31,7 @@ app.get("/users", (req, res) => {
   res.send(users);
 });
 
-app.post('/users', async (req, res) => {
+app.post('/users/register', async (req, res) => {
   const { email, firstName, lastName, password } = req.body
   const userCredentials: UserCredentialsInterface = {
     email,

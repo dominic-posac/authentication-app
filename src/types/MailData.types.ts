@@ -4,3 +4,9 @@ export interface MailDataInterface {
   subject: string;
   html: string;
 }
+
+export interface UserDataInterface {
+  email: string;
+  firstName: string;
+  lastName: string;
+}

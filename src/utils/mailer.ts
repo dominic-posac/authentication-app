@@ -13,7 +13,8 @@ const transporter = nodemailer.createTransport(
 
 export const sendRegistrationEmail = async (mailData: MailDataInterface) => {
   try {
-    await transporter.sendMail(mailData);
+    const sendMail = await transporter.sendMail(mailData);
+    return sendMail
   } catch (error) {
     return error
   }

@@ -8,6 +8,7 @@ import { authentication, random } from './helpers';
 import 'dotenv/config';
 import { UserFields } from './constants/UserFields';
 import { sendRegistrationEmail } from './utils/mailer';
+import { getMailData } from './constants/MailData';
 
 const app = express();
 const PORT = process.env.PORT
@@ -69,18 +70,11 @@ app.post('/users', async (req, res) => {
         password: authentication(salt, password)
       }
     }
-    
     users.push(user)
 
     // if(user creation is success)
-    const mailData = {
-      user: process.env.REGISTRATION_EMAIL_ADDRESS,
-      to: email,
-      subject: 'Successfully Registered!',
-      html: `<b>Hey there! </b><br> Thank you for registering, ${firstName} ${lastName}!<br/>`,
-    };
-    const registerEmail = await sendRegistrationEmail(mailData)
-    // if(email has an error, do i stop?)
+    const registerEmail = await sendRegistrationEmail(getMailData({ email, firstName, lastName }))
+    console.log(registerEmail)
 
     return res.status(200).send('You have successfully registered!').end();
   } catch (error) {

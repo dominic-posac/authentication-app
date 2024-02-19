@@ -3,7 +3,7 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import { CredentialsInterface, UserCredentialsInterface, UserInterface } from 'types/UserInterface.types';
+import { UserInterface } from 'types/UserInterface.types';
 import { FieldsInterface, authentication, checkIfUserExists, checkMissingFields, random } from './utils/helpers';
 import 'dotenv/config';
 import { loginFieldErrors, registerFieldErrors } from './utils/constants/FieldErrors';

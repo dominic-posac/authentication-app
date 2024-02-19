@@ -14,7 +14,3 @@ export interface UserInterface extends UserCredentialsInterface {
   authentication: AuthenticationInterface;
 }
 
-export interface CredentialsInterface {
-  field: string;
-  message: string;
-}

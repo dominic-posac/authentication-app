@@ -35,10 +35,10 @@ class User {
 }
 
 class Server {
-  private app: Application;
-  private server: HTTPServer;
-  private PORT: string | number;
-  private users: UserInterface[];
+  app: Application;
+  server: HTTPServer;
+  PORT: string | number;
+  users: UserInterface[];
 
   constructor() {
     this.app = express();
@@ -47,7 +47,7 @@ class Server {
     this.setupServer();
   }
 
-  private setupServer(): void {
+  setupServer(): void {
     this.app.use(compression());
     this.app.use(cookieParser());
     this.app.use(bodyParser.urlencoded({
@@ -63,17 +63,17 @@ class Server {
     this.setupRoutes();
   }
 
-  private setupRoutes(): void {
+  setupRoutes(): void {
     this.app.get("/users", this.getUsers.bind(this));
     this.app.post('/register', this.registerUser.bind(this));
     this.app.post('/login', this.loginUser.bind(this));
   }
 
-  private getUsers(req: Request, res: Response): void {
+  getUsers(req: Request, res: Response): void {
     res.send(this.users);
   }
 
-  private async registerUser(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
+  async registerUser(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
     const { email, firstName, lastName, password } = req.body;
     const fieldsFromReq: FieldsInterface = {
       email,
@@ -114,7 +114,7 @@ class Server {
     }
   }
 
-  private async loginUser(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
+  async loginUser(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
     const { email, password } = req.body;
     const fieldsFromReq: FieldsInterface = {
       email,

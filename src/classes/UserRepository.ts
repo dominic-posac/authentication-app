@@ -4,7 +4,7 @@ export class UserRepository  {
   users: UserInterface[];
 
   constructor() {
-    this.users = [{email: 'cruzdmnc@gmail.com', authentication: {salt: '', password: ''}, firstName: '', lastName: ''}];
+    this.users = [];
   }
 
   getUsers() {

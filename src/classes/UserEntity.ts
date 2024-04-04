@@ -2,7 +2,7 @@ import { UserInterface } from "../types/UserInterface.types";
 import { Authentication } from "./Authentication";
 import { users } from "../index";
 
-export class UserEntity {
+export class UserEntity implements UserInterface {
   email: string;
   firstName: string;
   lastName: string;

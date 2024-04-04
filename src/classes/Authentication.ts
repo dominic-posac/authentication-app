@@ -1,6 +1,7 @@
+import { AuthenticationInterface } from "../types/UserInterface.types";
 import { authentication } from "../utils/helpers";
 
-export class Authentication {
+export class Authentication implements AuthenticationInterface {
   salt: string;
   password: string;
 

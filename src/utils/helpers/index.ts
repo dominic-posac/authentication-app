@@ -12,13 +12,6 @@ export const normalizeCamelCase = (text: string) => {
   return capitalizedInnerFirstLetters.charAt(0).toUpperCase() + capitalizedInnerFirstLetters.slice(1);
 }
 
-export const checkIfUserExists = (users: UserInterface[], email: string) => {
-  if(!email) {
-    return
-  }
-  return users.filter(user => user.email === email)[0]
-}
-
 export interface FieldsInterface {
   [key: string]: string
 }

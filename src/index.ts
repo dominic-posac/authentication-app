@@ -1,13 +1,11 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application } from 'express';
 import http, { Server as HTTPServer } from 'http';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import { UserInterface } from 'types/UserInterface.types';
 import 'dotenv/config';
 import { getUsers, registerUser, loginUser } from './controllers';
-
-export const users: UserInterface[] = []
+import { UserRepository } from './classes/UserRepository';
 
 class Server {
   app: Application;
@@ -43,4 +41,6 @@ class Server {
   }
 }
 
+
+export const users = new UserRepository();
 const server = new Server();

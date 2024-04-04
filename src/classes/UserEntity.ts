@@ -16,7 +16,7 @@ export class UserEntity implements UserInterface {
     if(!email) {
       return null
     }
-    return users.find(user => user.email === email);
+    return users.findUser(email);
   }
 
   static createUser(fields: UserInterface) {

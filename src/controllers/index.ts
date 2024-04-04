@@ -8,7 +8,7 @@ import { RegistrationEmail } from '../classes/RegistrationEmail';
 import { sendRegistrationEmail } from '../utils/mailer';
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
-  res.send(users);
+  res.send(users.getUsers());
 }
 
 export const registerUser = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> =>  {
@@ -38,7 +38,7 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
       return res.status(400).send('User already exists.');
     }
     else {
-      users.push(newUser);
+      users.addUser(newUser);
       const mailData = RegistrationEmail.getMailData({ email, firstName, lastName })
       const registerEmail = await sendRegistrationEmail(mailData);
       return res.status(200).send('You have successfully registered!').end();
@@ -65,7 +65,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response<a
     if (user) {
         const passwordFromLoginHash = new Authentication(user.authentication.salt, password);
         if (user.authentication.password !== passwordFromLoginHash.password) {
-            return res.status(403).send('Incorrect password!');
+          return res.status(403).send('Incorrect password!');
         }
         return res.status(200).send('Login Successful!').end();
       } else {

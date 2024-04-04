@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { UserInterface } from 'types/UserInterface.types';
 
 export const random = () => crypto.randomBytes(128).toString('base64');
 

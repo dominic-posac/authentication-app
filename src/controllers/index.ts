@@ -1,9 +1,11 @@
-import {  Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { FieldsInterface, checkMissingFields, random } from '../utils/helpers';
 import { registerFieldErrors, loginFieldErrors } from '../utils/constants/FieldErrors';
 import { Authentication } from '../classes/Authentication';
 import { UserEntity } from '../classes/UserEntity';
 import { users } from '../index';
+import { RegistrationEmail } from '../classes/RegistrationEmail';
+import { sendRegistrationEmail } from '../utils/mailer';
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   res.send(users);
@@ -37,9 +39,8 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
     }
     else {
       users.push(newUser);
-      // const registerEmail = await sendRegistrationEmail(getMailData({ email, firstName, lastName }));
-      // console.log(registerEmail);
-
+      const mailData = RegistrationEmail.getMailData({ email, firstName, lastName })
+      const registerEmail = await sendRegistrationEmail(mailData);
       return res.status(200).send('You have successfully registered!').end();
     }
   } catch (error) {

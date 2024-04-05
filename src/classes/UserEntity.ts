@@ -1,6 +1,6 @@
 import { UserInterface } from "../types/UserInterface.types";
 import { Authentication } from "./Authentication";
-import { users } from "../index";
+import { UserRepository } from "../index";
 
 export class UserEntity implements UserInterface {
   email: string;
@@ -12,15 +12,15 @@ export class UserEntity implements UserInterface {
     Object.assign(this, fields);
   }
 
-  static checkIfUserExists(email: string) {
+  static async checkIfUserExists(email: string) {
     if(!email) {
       return null
     }
-    return users.findUser(email);
+    return UserRepository.findUser(email);
   }
 
-  static createUser(fields: UserInterface) {
-    const existingUser = this.checkIfUserExists(fields.email)
+  static async createUser(fields: UserInterface) {
+    const existingUser = await this.checkIfUserExists(fields.email)
     if (existingUser) {
       return null
     }

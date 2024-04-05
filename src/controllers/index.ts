@@ -6,39 +6,31 @@ import { UserEntity } from '../classes/UserEntity';
 import { UserRepository } from '../index';
 import { RegistrationEmail } from '../classes/RegistrationEmail';
 import { sendRegistrationEmail } from '../utils/mailer';
+import { AddUserInterface, FindUserInterface, GetUsersInterface } from 'repositories/UserRepositoryInterface';
 
 export class GetUsersController {
-  constructor(private req: Request, private res: Response) {}
+  constructor(private userRepository: GetUsersInterface) {}
 
-  async getUsers() {
-    const usersArr = UserRepository.getUsers()
-    return usersArr
-  }
-
-  async getAllUsers(): Promise<Response<any, Record<string, any>>> {
+  async getAllUsers(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
     try {
-      const users = await this.getUsers()
-      this.res.send(users);
+      const users = await this.userRepository.getUsers()
+      res.send(users);
     }
     catch (error) {
-      return this.res.status(400).send(error);
+      return res.status(400).send(error);
     }
   }
 }
 
 export const getUsersHandler = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
-  return new GetUsersController(req, res).getAllUsers();
+  return new GetUsersController(UserRepository).getAllUsers(req, res);
 };
 
 export class RegisterUserController {
-  constructor(private req: Request, private res: Response) {}
+  constructor(private userRepository: AddUserInterface) {}
 
-  async addUser(newUser: UserEntity): Promise<void> {
-    return UserRepository.addUser(newUser);
-  }
-
-  async registerUser(): Promise<Response<any, Record<string, any>>> {
-    const { email, firstName, lastName, password } = this.req.body;
+  async registerUser(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
+    const { email, firstName, lastName, password } = req.body;
     const fieldsFromReq = {
       email,
       firstName,
@@ -47,39 +39,40 @@ export class RegisterUserController {
     try {
       const missingCreds = checkMissingFields({ ...fieldsFromReq, password }, registerFieldErrors);
       if (missingCreds.length > 0) {
-        return this.res.status(400).send(missingCreds);
+        return res.status(400).send(missingCreds);
       }
       const salt = random();
       const fields = { ...fieldsFromReq, authentication: new Authentication(salt, password) };
       const newUser = await UserEntity.createUser(fields);
-      if (!newUser) {
-        return this.res.status(400).send('User already exists.');
+      const userExists = await this.userRepository.findUser(newUser.email);
+      if (userExists) {
+        return res.status(400).send('User already exists.');
       } else {
-        const addUserToDb = await this.addUser(newUser)
+        const addUserToDb = await this.userRepository.addUser(newUser)
         if(addUserToDb !== null) {
           const mailData = RegistrationEmail.getMailData({ email, firstName, lastName })
           const registerEmail = await sendRegistrationEmail(mailData);
-          return this.res.status(200).send('You have successfully registered!').end();
+          return res.status(200).send('You have successfully registered!').end();
         }
         else {
-          return this.res.status(400).send('Something went wrong.');
+          return res.status(400).send('Something went wrong.');
         }
       }
     } catch (error) {
-      return this.res.status(400).send(error);
+      return res.status(400).send(error);
     }
   }
 }
 
 export const registerUserHandler = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
-  return new RegisterUserController(req, res).registerUser();
+  return new RegisterUserController(UserRepository).registerUser(req, res);
 };
 
 export class LoginUserController {
-  constructor(private req: Request, private res: Response) {}
+  constructor(private userRepository: FindUserInterface) {}
 
-  async loginUser(): Promise<Response<any, Record<string, any>>> {
-    const { email, password } = this.req.body;
+  async loginUser(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
+    const { email, password } = req.body;
     const fieldsFromReq: FieldsInterface = {
       email,
       password
@@ -87,25 +80,25 @@ export class LoginUserController {
     try {
       const missingCreds = checkMissingFields(fieldsFromReq, loginFieldErrors);
       if (missingCreds.length > 0) {
-        return this.res.status(400).send(missingCreds);
+        return res.status(400).send(missingCreds);
       }
   
-    const user = await UserEntity.checkIfUserExists(email);
+    const user = await this.userRepository.findUser(email);
     if (user) {
         const passwordFromLoginHash = new Authentication(user.authentication.salt, password);
         if (user.authentication.password !== passwordFromLoginHash.password) {
-          return this.res.status(403).send('Incorrect password!');
+          return res.status(403).send('Incorrect password!');
         }
-        return this.res.status(200).send('Login Successful!').end();
+        return res.status(200).send('Login Successful!').end();
       } else {
-        return this.res.status(400).send('User does not exist!');
+        return res.status(400).send('User does not exist!');
       }
     } catch (error) {
-      return this.res.status(400).send(error);
+      return res.status(400).send(error);
     }
   }
 }
 
 export const loginUserHandler = async (req: Request, res: Response): Promise<Response<any, Record<string, any>>> => {
-  return new LoginUserController(req, res).loginUser();
+  return new LoginUserController(UserRepository).loginUser(req, res);
 };

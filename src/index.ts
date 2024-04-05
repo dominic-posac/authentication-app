@@ -41,5 +41,5 @@ class Server {
   }
 }
 
-export const UserRepository = new InMemoryUserInterface();
+export const UserRepository = new InMemoryUserInterface(); // can add conditional here to use diff repositories depending on env
 const server = new Server();

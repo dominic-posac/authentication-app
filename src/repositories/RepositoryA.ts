@@ -1,21 +1,23 @@
 import { UserInterface } from "../types/UserInterface.types";
+import { GenericRepositoryInterface } from "./GenericRepositoryInterface";
 
-export class UserRepository  {
+export class RepositoryA implements GenericRepositoryInterface {
   users: UserInterface[];
 
   constructor() {
     this.users = [];
   }
 
-  getUsers() {
+  async getUsers() {
     return this.users
   }
 
-  findUser(email: string) {
+  async findUser(email: string) {
     return this.users.find(user => user.email === email);
   }
 
-  addUser(newUser: UserInterface) {
+  async addUser(newUser: UserInterface) {
     this.users.push(newUser)
+    return
   }
 }

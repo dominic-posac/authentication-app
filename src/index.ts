@@ -4,8 +4,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import 'dotenv/config';
-import { getUsers, registerUser, loginUser } from './controllers';
-import { UserRepository } from './classes/UserRepository';
+import { getUsersHandler, registerUserHandler, loginUserHandler } from './controllers';
+import { RepositoryA } from './repositories/RepositoryA';
 
 class Server {
   app: Application;
@@ -35,12 +35,11 @@ class Server {
   }
 
   setupRoutes(): void {
-    this.app.get("/users", getUsers);
-    this.app.post('/register', registerUser);
-    this.app.post('/login', loginUser);
+    this.app.get("/users", getUsersHandler);
+    this.app.post('/register', registerUserHandler);
+    this.app.post('/login', loginUserHandler);
   }
 }
 
-
-export const users = new UserRepository();
+export const UserRepository = new RepositoryA();
 const server = new Server();

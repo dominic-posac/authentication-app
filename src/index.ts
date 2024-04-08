@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import 'dotenv/config';
 import { getUsersHandler, registerUserHandler, loginUserHandler } from './controllers';
-import { RepositoryA } from './repositories/RepositoryA';
+import { InMemoryUserInterface } from './repositories/InMemoryUserInterface';
 
 class Server {
   app: Application;
@@ -41,5 +41,5 @@ class Server {
   }
 }
 
-export const UserRepository = new RepositoryA();
+export const UserRepository = new InMemoryUserInterface(); // can add conditional here to use diff repositories depending on env
 const server = new Server();

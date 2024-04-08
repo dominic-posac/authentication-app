@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { UserInterface } from 'types/UserInterface.types';
 
 export const random = () => crypto.randomBytes(128).toString('base64');
 
@@ -10,13 +9,6 @@ export const authentication = (salt: string, password: string) => {
 export const normalizeCamelCase = (text: string) => {
   const capitalizedInnerFirstLetters = text.replace(/([A-Z])/g, ' $1');
   return capitalizedInnerFirstLetters.charAt(0).toUpperCase() + capitalizedInnerFirstLetters.slice(1);
-}
-
-export const checkIfUserExists = (users: UserInterface[], email: string) => {
-  if(!email) {
-    return
-  }
-  return users.filter(user => user.email === email)[0]
 }
 
 export interface FieldsInterface {

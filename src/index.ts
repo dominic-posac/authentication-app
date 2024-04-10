@@ -35,6 +35,7 @@ class Server {
   }
 
   setupRoutes(): void {
+    this.app.get("/", (req, res) => {res.send("Authentication app")}); // temporary, just for displaying something in "/"
     this.app.get("/users", getUsersHandler);
     this.app.post('/register', registerUserHandler);
     this.app.post('/login', loginUserHandler);

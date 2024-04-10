@@ -14,7 +14,7 @@ class Server {
 
   constructor() {
     this.app = express();
-    this.PORT = process.env.PORT || 3000;
+    this.PORT = process.env.PORT || 8080;
     this.setupServer();
   }
 

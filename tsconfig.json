@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
-    "module": "ES2022",
-    "moduleResolution": "bundler",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "baseUrl": "src",
     "outDir": "dist",
     "sourceMap": true,
-    "noImplicitAny": true,
   },
   "include": ["src/**/*"]
 }

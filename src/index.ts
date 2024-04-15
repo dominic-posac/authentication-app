@@ -6,7 +6,7 @@ import compression from 'compression';
 import 'dotenv/config';
 import { getUsersHandler, registerUserHandler, loginUserHandler } from './controllers';
 import { InMemoryUserInterface } from './repositories/InMemoryUserInterface';
-import { SqlUserRepository } from 'repositories/SqlUserRepository';
+import { SqlUserRepository } from './repositories/SqlUserRepository';
 
 class Server {
   app: Application;

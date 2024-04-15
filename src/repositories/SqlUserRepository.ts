@@ -1,7 +1,7 @@
-import { pool } from "database";
+import { pool } from "../database";
 import { UserInterface } from "../types/UserInterface.types";
 import { UserRepositoryInterface } from "./UserRepositoryInterface";
-import { UserEntity } from "classes/UserEntity";
+import { UserEntity } from "../classes/UserEntity";
 import { RowDataPacket } from "mysql2";
 
 export interface SqlUserInterface extends UserEntity, RowDataPacket {}

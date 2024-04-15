@@ -21,3 +21,16 @@ docker run -dp 127.0.0.1:8080:8080 -v "$(pwd):/app" --name authentication-app au
 ```
 http://localhost:8080/
 ```
+
+## ENVs needed
+```
+PORT=
+REGISTRATION_EMAIL_ADDRESS=
+REGISTRATION_EMAIL_PASSWORD=
+ACTIVE_DB=
+
+DB_HOST=
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+```

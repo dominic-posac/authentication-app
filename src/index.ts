@@ -14,7 +14,7 @@ class Server {
 
   constructor() {
     this.app = express();
-    this.PORT = process.env.PORT || 3000;
+    this.PORT = process.env.PORT || 8080;
     this.setupServer();
   }
 
@@ -35,6 +35,7 @@ class Server {
   }
 
   setupRoutes(): void {
+    this.app.get("/", (req, res) => {res.send("Authentication app")}); // temporary, just for displaying something in "/"
     this.app.get("/users", getUsersHandler);
     this.app.post('/register', registerUserHandler);
     this.app.post('/login', loginUserHandler);

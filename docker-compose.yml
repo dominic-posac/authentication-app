@@ -1,6 +1,22 @@
 version: '3.5'
 services:
+  mysqldb:
+    image: mysql:latest
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_DATABASE=authentication-app
+      - MYSQL_PASSWORD=testpassword
+      - MYSQL_ROOT_PASSWORD=testpassword
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      retries: 10
+      interval: 3s
+      timeout: 30s
   server:
+    depends_on:
+      mysqldb:
+        condition: service_healthy
     container_name: authentication-app-server
     build: ./
     ports:

@@ -6,6 +6,7 @@ import compression from 'compression';
 import 'dotenv/config';
 import { getUsersHandler, registerUserHandler, loginUserHandler } from './controllers';
 import { InMemoryUserInterface } from './repositories/InMemoryUserInterface';
+import { SqlUserRepository } from './repositories/SqlUserRepository';
 
 class Server {
   app: Application;
@@ -42,5 +43,5 @@ class Server {
   }
 }
 
-export const UserRepository = new InMemoryUserInterface(); // can add conditional here to use diff repositories depending on env
+export const UserRepository = process.env.ACTIVE_DB === "mysql" ? new SqlUserRepository() : new InMemoryUserInterface()
 const server = new Server();

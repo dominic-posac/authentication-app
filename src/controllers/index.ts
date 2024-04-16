@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import { FieldsInterface, checkMissingFields, random } from '../utils/helpers';
+import { FieldsInterface, checkMissingFields, checkPassword, hashPassword } from '../utils/helpers';
 import { registerFieldErrors, loginFieldErrors } from '../utils/constants/FieldErrors';
-import { Authentication } from '../classes/Authentication';
 import { UserEntity } from '../classes/UserEntity';
 import { UserRepository } from '../index';
 import { RegistrationEmail } from '../classes/RegistrationEmail';
@@ -31,18 +30,21 @@ export class RegisterUserController {
 
   async registerUser(req: Request, res: Response): Promise<Response<any, Record<string, any>>> {
     const { email, firstName, lastName, password } = req.body;
+    const hashedPassword = await hashPassword(password)
     const fieldsFromReq = {
       email,
       firstName,
       lastName,
+      password: hashedPassword
     };
+    const saltRounds = 10;
+
     try {
-      const missingCreds = checkMissingFields({ ...fieldsFromReq, password }, registerFieldErrors);
+      const missingCreds = checkMissingFields(fieldsFromReq, registerFieldErrors);
       if (missingCreds.length > 0) {
         return res.status(400).send(missingCreds);
       }
-      const salt = random();
-      const fields = { ...fieldsFromReq, authentication: new Authentication(salt, password) };
+      const fields = fieldsFromReq;
       const newUser = await UserEntity.createUser(fields);
       const userExists = await this.userRepository.findUser(newUser.email);
       if (userExists) {
@@ -85,8 +87,8 @@ export class LoginUserController {
   
     const user = await this.userRepository.findUser(email);
     if (user) {
-        const passwordFromLoginHash = new Authentication(user.authentication.salt, password);
-        if (user.authentication.password !== passwordFromLoginHash.password) {
+      const isPassordSame = await checkPassword(password, user.password)
+      if (!isPassordSame) {
           return res.status(403).send('Incorrect password!');
         }
         return res.status(200).send('Login Successful!').end();

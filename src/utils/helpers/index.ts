@@ -1,9 +1,14 @@
-import crypto from 'crypto';
+import bcrypt from "bcryptjs"
 
-export const random = () => crypto.randomBytes(128).toString('base64');
+export const hashPassword = async (password: string) => {
+  const saltRounds = 10;
+  const hash = await bcrypt.hash(password, saltRounds);
+  return hash
+}
 
-export const authentication = (salt: string, password: string) => {
-  return crypto.createHmac('sha256', [salt, password].join('/')).update(process.env.AUTHENTICATION_SECRET || '').digest('hex')
+export const checkPassword = async (password: string, hash: string) => {
+  const isPasswordSame = await bcrypt.compare(password, hash);
+  return isPasswordSame
 }
 
 export const normalizeCamelCase = (text: string) => {

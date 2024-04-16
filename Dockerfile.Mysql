@@ -1,0 +1,9 @@
+FROM mysql:latest
+ENV MYSQL_DATABASE=authentication-app
+ENV MYSQL_PASSWORD=testpassword
+ENV MYSQL_ROOT_PASSWORD=testpassword
+EXPOSE 3306
+HEALTHCHECK --interval=3s --timeout=30s \
+  CMD mysqladmin ping -h localhost || exit 1
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["mysqld"]

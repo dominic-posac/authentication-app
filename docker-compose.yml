@@ -1,26 +1,31 @@
 version: '3.5'
 services:
   mysqldb:
+    container_name: authentication-app-mysql
     image: mysql:latest
     ports:
       - 3307:3306
     environment:
       - MYSQL_DATABASE=authentication-app
-      - MYSQL_PASSWORD=testpassword
-      - MYSQL_ROOT_PASSWORD=testpassword
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       retries: 10
       interval: 3s
       timeout: 30s
   server:
+    container_name: authentication-app-server
     depends_on:
       mysqldb:
         condition: service_healthy
-    container_name: authentication-app-server
-    build: ./
+    build: 
+      context: ./
+      dockerfile: Dockerfile.Server
     ports:
       - 8080:8080
     volumes:
       - ./:/app
     command: ["npm", "start"]
+
+

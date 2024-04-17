@@ -28,4 +28,4 @@ services:
       - ./:/app
     command: ["npm", "start"]
 
-
+# TODO: add mysql entrypoint to initialize users table

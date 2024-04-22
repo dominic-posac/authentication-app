@@ -2,7 +2,7 @@ version: '3.5'
 services:
   mysqldb:
     container_name: authentication-app-mysql
-    image: mysql:latest
+    image: mysql:8.3.0
     ports:
       - 3307:3306
     environment:

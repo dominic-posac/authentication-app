@@ -5,7 +5,7 @@ import { UserEntity } from '../classes/UserEntity';
 import { UserRepository } from '../index';
 import { RegistrationEmail } from '../classes/RegistrationEmail';
 import { sendRegistrationEmail } from '../utils/mailer';
-import { AddUserInterface, FindUserInterface, GetUsersInterface } from 'repositories/UserRepositoryInterface';
+import { AddUserInterface, FindUserInterface, GetUsersInterface } from '../repositories/UserRepositoryInterface';
 
 export class GetUsersController {
   constructor(private userRepository: GetUsersInterface) {}

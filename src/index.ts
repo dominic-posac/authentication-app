@@ -4,9 +4,11 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import 'dotenv/config';
-import { getUsersHandler, registerUserHandler, loginUserHandler } from './controllers';
+import { getUsersHandler, registerUserHandler, loginUserHandler } from './controllers/userControllers';
+import { addPostHandler, findPostHandler, getPostsHandler } from './controllers/postControllers';
 import { InMemoryUserInterface } from './repositories/InMemoryUserInterface';
 import { SqlUserRepository } from './repositories/SqlUserRepository';
+import { TypeormPostRepository } from './repositories/TypeormPostRepository';
 
 class Server {
   app: Application;
@@ -40,8 +42,13 @@ class Server {
     this.app.get("/users", getUsersHandler);
     this.app.post('/register', registerUserHandler);
     this.app.post('/login', loginUserHandler);
+    this.app.get('/posts', getPostsHandler);
+    this.app.get('/posts/:id', findPostHandler);
+    this.app.post('/add-post', addPostHandler);
   }
 }
 
 export const UserRepository = process.env.ACTIVE_DB === "mysql" ? new SqlUserRepository() : new InMemoryUserInterface()
+export const PostRepository = new TypeormPostRepository()
+
 const server = new Server();

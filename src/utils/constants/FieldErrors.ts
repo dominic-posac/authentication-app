@@ -27,3 +27,14 @@ export const loginFieldErrors = [
     message: 'Please enter your password.'
   },
 ]
+
+export const postFieldErrors = [
+  {
+    field: 'title',
+    message: 'Your post needs a title.'
+  },
+  {
+    field: 'description',
+    message: 'You must say something!'
+  },
+]

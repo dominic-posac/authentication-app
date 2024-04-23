@@ -1,13 +1,13 @@
 import { PostRepositoryInterface } from "../types/PostRepositoryInterface";
-import { TypeormPostEntity } from "../classes/TypeormPostEntity";
+import { PostEntity } from "../classes/PostEntity";
 import { TypeormDataSource } from "../typeorm-data-source";
 import { Repository } from "typeorm";
 
 export class TypeormPostRepository implements PostRepositoryInterface {
-  postRepository: Repository<TypeormPostEntity>
+  postRepository: Repository<PostEntity>
 
   constructor() {
-    this.postRepository = TypeormDataSource.getRepository(TypeormPostEntity)
+    this.postRepository = TypeormDataSource.getRepository(PostEntity)
   }
 
   async getPosts() {
@@ -20,7 +20,7 @@ export class TypeormPostRepository implements PostRepositoryInterface {
     return post
   }
 
-  async addPost(newPost: TypeormPostEntity) {
+  async addPost(newPost: PostEntity) {
     const savedPost = await this.postRepository.save(newPost)
     return savedPost
   }

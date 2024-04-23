@@ -42,8 +42,9 @@ export class RegisterUserController {
       if (missingCreds.length > 0) {
         return res.status(400).send(missingCreds);
       }
-      const fields = fieldsFromReq;
-      const newUser = await UserEntity.createUser(fields);
+      const newUser = new UserEntity();
+      Object.assign(newUser, fieldsFromReq);
+
       const userExists = await this.userRepository.findUser(newUser.email);
       if (userExists) {
         return res.status(400).send('User already exists.');

@@ -1,13 +1,13 @@
-import { TypeormUserEntity } from "../classes/TypeormUserEntity";
+import { UserEntity } from "../classes/UserEntity";
 import { TypeormDataSource } from "../typeorm-data-source";
 import { Repository } from "typeorm";
 import { UserRepositoryInterface } from "../types/UserRepositoryInterface";
 
 export class TypeormUserRepository implements UserRepositoryInterface {
-  userRepository: Repository<TypeormUserEntity>
+  userRepository: Repository<UserEntity>
 
   constructor() {
-    this.userRepository = TypeormDataSource.getRepository(TypeormUserEntity)
+    this.userRepository = TypeormDataSource.getRepository(UserEntity)
   }
 
   async getUsers() {
@@ -20,7 +20,7 @@ export class TypeormUserRepository implements UserRepositoryInterface {
     return user
   }
 
-  async addUser(newUser: TypeormUserEntity) {
+  async addUser(newUser: UserEntity) {
     const savedUser = await this.userRepository.save(newUser)
     return 
   }

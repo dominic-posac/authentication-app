@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
-import { TypeormUserEntity } from "./classes/TypeormUserEntity";
-import { TypeormPostEntity } from "./classes/TypeormPostEntity";
+import { UserEntity } from "./classes/UserEntity";
+import { PostEntity } from "./classes/PostEntity";
 import "reflect-metadata"
 
 export const TypeormDataSource = new DataSource({
@@ -12,7 +12,7 @@ export const TypeormDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: true,
-  entities: [TypeormPostEntity, TypeormUserEntity],
+  entities: [PostEntity, UserEntity],
   subscribers: [],
   migrations: [],
 })

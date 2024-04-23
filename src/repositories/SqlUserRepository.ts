@@ -1,10 +1,10 @@
 import { pool } from "../database";
 import { UserInterface } from "../types/UserInterface.types";
-import { UserRepositoryInterface } from "./UserRepositoryInterface";
+import { UserRepositoryInterface } from "../types/UserRepositoryInterface";
 import { UserEntity } from "../classes/UserEntity";
 import { RowDataPacket } from "mysql2";
 
-export interface SqlUserInterface extends UserEntity, RowDataPacket {}
+interface SqlUserInterface extends UserEntity, RowDataPacket {}
 
 export class SqlUserRepository implements UserRepositoryInterface {
   async getUsers() {

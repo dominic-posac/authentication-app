@@ -1,15 +1,15 @@
-import { PostEntity } from "../classes/PostEntity";
+import { TypeormPostEntity } from "../classes/TypeormPostEntity";
 
 export interface GetPostsInterface {
-  getPosts(): Promise<PostEntity[]>;
+  getPosts(): Promise<TypeormPostEntity[]>;
 }
 
 export interface FindPostInterface {
-  findPost(id: number): Promise<PostEntity>;
+  findPost(id: number): Promise<TypeormPostEntity>;
 }
 
 export interface AddPostInterface extends FindPostInterface {
-  addPost(newPost: PostEntity): Promise<PostEntity>;
+  addPost(newPost: TypeormPostEntity): Promise<TypeormPostEntity>;
 }
 
 export interface PostRepositoryInterface extends GetPostsInterface, AddPostInterface {}

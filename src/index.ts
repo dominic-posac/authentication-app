@@ -6,9 +6,11 @@ import compression from 'compression';
 import 'dotenv/config';
 import { getUsersHandler, registerUserHandler, loginUserHandler } from './controllers/userControllers';
 import { addPostHandler, findPostHandler, getPostsHandler } from './controllers/postControllers';
-import { InMemoryUserInterface } from './repositories/InMemoryUserInterface';
+import { InMemoryUserRepository } from './repositories/InMemoryUserRepository';
 import { SqlUserRepository } from './repositories/SqlUserRepository';
 import { TypeormPostRepository } from './repositories/TypeormPostRepository';
+import { TypeormDataSource } from './typeorm-data-source';
+import { TypeormUserRepository } from './repositories/TypeormUserRepository';
 
 class Server {
   app: Application;
@@ -48,7 +50,8 @@ class Server {
   }
 }
 
-export const UserRepository = process.env.ACTIVE_DB === "mysql" ? new SqlUserRepository() : new InMemoryUserInterface()
+export const UserRepository = process.env.ACTIVE_DB === "mysql" ? new SqlUserRepository() : process.env.ACTIVE_DB === "typeorm" ? new TypeormUserRepository() : new InMemoryUserRepository()
 export const PostRepository = new TypeormPostRepository()
+TypeormDataSource.initialize()
 
 const server = new Server();

@@ -1,7 +1,7 @@
 import { UserInterface } from "../types/UserInterface.types";
-import { UserRepositoryInterface } from "./UserRepositoryInterface";
+import { UserRepositoryInterface } from "../types/UserRepositoryInterface";
 
-export class InMemoryUserInterface implements UserRepositoryInterface {
+export class InMemoryUserRepository implements UserRepositoryInterface {
   users: UserInterface[];
 
   constructor() {

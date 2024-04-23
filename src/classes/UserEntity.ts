@@ -1,4 +1,6 @@
 import { UserInterface } from "../types/UserInterface.types";
+import { TypeormUserEntity } from "./TypeormUserEntity";
+import 'dotenv/config';
 
 export class UserEntity implements UserInterface {
   email: string;
@@ -11,6 +13,10 @@ export class UserEntity implements UserInterface {
   }
 
   static async createUser(fields: UserInterface) {
-    return new UserEntity(fields)
+    const typeormUser = new TypeormUserEntity;
+    Object.assign(typeormUser, fields);
+    const user = new UserEntity(fields)
+// return process.env.ACTIVE_DB === "typeorm" ? typeormUser : user
+    return typeormUser
   }
 }

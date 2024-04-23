@@ -5,7 +5,7 @@ import { UserEntity } from '../classes/UserEntity';
 import { UserRepository } from '../index';
 import { RegistrationEmail } from '../classes/RegistrationEmail';
 import { sendRegistrationEmail } from '../utils/mailer';
-import { AddUserInterface, FindUserInterface, GetUsersInterface } from '../repositories/UserRepositoryInterface';
+import { AddUserInterface, FindUserInterface, GetUsersInterface } from '../types/UserRepositoryInterface';
 
 export class GetUsersController {
   constructor(private userRepository: GetUsersInterface) {}
@@ -37,8 +37,6 @@ export class RegisterUserController {
       lastName,
       password: hashedPassword
     };
-    const saltRounds = 10;
-
     try {
       const missingCreds = checkMissingFields(fieldsFromReq, registerFieldErrors);
       if (missingCreds.length > 0) {

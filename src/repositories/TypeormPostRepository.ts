@@ -1,31 +1,27 @@
-import { PostRepositoryInterface } from "./PostRepositoryInterface";
-import { PostEntity } from "../classes/PostEntity";
+import { PostRepositoryInterface } from "../types/PostRepositoryInterface";
+import { TypeormPostEntity } from "../classes/TypeormPostEntity";
 import { TypeormDataSource } from "../typeorm-data-source";
+import { Repository } from "typeorm";
 
 export class TypeormPostRepository implements PostRepositoryInterface {
-  constructor() {
-    this.initialize();
-  }
+  postRepository: Repository<TypeormPostEntity>
 
-  initialize() {
-    TypeormDataSource.initialize()
+  constructor() {
+    this.postRepository = TypeormDataSource.getRepository(TypeormPostEntity)
   }
 
   async getPosts() {
-    const postRepository = TypeormDataSource.getRepository(PostEntity)
-    const savedPosts = await postRepository.find()
+    const savedPosts = await this.postRepository.find()
     return savedPosts
   }
 
   async findPost(id: number) {
-    const postRepository = TypeormDataSource.getRepository(PostEntity)
-    const post = await postRepository.findOneBy({ id: id })
+    const post = await this.postRepository.findOneBy({ id: id })
     return post
   }
 
-  async addPost(newPost: PostEntity) {
-    const postRepository = TypeormDataSource.getRepository(PostEntity)
-    const savedPost = await postRepository.save(newPost)
+  async addPost(newPost: TypeormPostEntity) {
+    const savedPost = await this.postRepository.save(newPost)
     return savedPost
   }
 }

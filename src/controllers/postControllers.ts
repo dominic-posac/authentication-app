@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { PostRepository } from '../index';
-import { AddPostInterface, FindPostInterface, GetPostsInterface } from '../repositories/PostRepositoryInterface';
+import { AddPostInterface, FindPostInterface, GetPostsInterface } from '../types/PostRepositoryInterface';
 import { checkMissingFields } from '../utils/helpers';
 import { postFieldErrors } from '../utils/constants/FieldErrors';
-import { PostEntity } from '../classes/PostEntity';
+import { TypeormPostEntity } from '../classes/TypeormPostEntity';
 
 export class GetPostsController {
   constructor(private postRepository: GetPostsInterface) {}
@@ -59,7 +59,7 @@ export class AddPostController {
       if (missingCreds.length > 0) {
         return res.status(400).send(missingCreds);
       }
-      const newPost = new PostEntity;
+      const newPost = new TypeormPostEntity;
       newPost.title = title
       newPost.description = description
       const addPostToDb = await this.postRepository.addPost(newPost)

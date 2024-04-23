@@ -1,6 +1,7 @@
-import { PostEntity } from "./classes/PostEntity";
-import "reflect-metadata"
 import { DataSource } from "typeorm";
+import { TypeormUserEntity } from "./classes/TypeormUserEntity";
+import { TypeormPostEntity } from "./classes/TypeormPostEntity";
+import "reflect-metadata"
 
 export const TypeormDataSource = new DataSource({
   type: "mysql",
@@ -11,7 +12,7 @@ export const TypeormDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: true,
-  entities: [PostEntity],
+  entities: [TypeormPostEntity, TypeormUserEntity],
   subscribers: [],
   migrations: [],
 })

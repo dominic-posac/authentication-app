@@ -13,10 +13,8 @@ export class UserEntity implements UserInterface {
   }
 
   static async createUser(fields: UserInterface) {
-    const typeormUser = new TypeormUserEntity;
-    Object.assign(typeormUser, fields);
-    const user = new UserEntity(fields)
-// return process.env.ACTIVE_DB === "typeorm" ? typeormUser : user
-    return typeormUser
+    const newUser = new TypeormUserEntity;
+    Object.assign(newUser, fields);
+    return newUser
   }
 }

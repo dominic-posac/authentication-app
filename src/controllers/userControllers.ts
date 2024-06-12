@@ -5,7 +5,7 @@ import { UserEntity } from '../classes/UserEntity';
 import { UserRepository } from '../index';
 import { RegistrationEmail } from '../classes/RegistrationEmail';
 import { sendRegistrationEmail } from '../utils/mailer';
-import { AddUserInterface, FindUserInterface, GetUsersInterface } from 'repositories/UserRepositoryInterface';
+import { AddUserInterface, FindUserInterface, GetUsersInterface } from '../types/UserRepositoryInterface';
 
 export class GetUsersController {
   constructor(private userRepository: GetUsersInterface) {}
@@ -37,15 +37,14 @@ export class RegisterUserController {
       lastName,
       password: hashedPassword
     };
-    const saltRounds = 10;
-
     try {
       const missingCreds = checkMissingFields(fieldsFromReq, registerFieldErrors);
       if (missingCreds.length > 0) {
         return res.status(400).send(missingCreds);
       }
-      const fields = fieldsFromReq;
-      const newUser = await UserEntity.createUser(fields);
+      const newUser = new UserEntity();
+      Object.assign(newUser, fieldsFromReq);
+
       const userExists = await this.userRepository.findUser(newUser.email);
       if (userExists) {
         return res.status(400).send('User already exists.');
